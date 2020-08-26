@@ -1,0 +1,33 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: checkpoint 6
+
+Parameters:
+  PolicyARN:
+    Type: String
+    Default: arn:aws:iam::821383200340:policy/PasiSNSPolicy
+
+Resources:
+
+  SnsMessage:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: sns.lambda_handler
+      Runtime: python3.8
+      Tracing: Active
+      Events:
+        API:
+          Type: Api
+          Properties:
+            Path: /dev
+            Method: post
+      Policies:
+        - !Ref PolicyARN
+
+  TheTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      Tags:
+        - Key: Owner
+          Value: Pasi
+      TopicName: PasiTopic
